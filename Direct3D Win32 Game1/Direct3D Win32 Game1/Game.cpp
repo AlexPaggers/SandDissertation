@@ -59,6 +59,11 @@ void Game::Update(DX::StepTimer const& timer)
     float elapsedTime = float(timer.GetElapsedSeconds());
 
     // TODO: Add your game logic here.
+
+	float time = float(timer.GetTotalSeconds());
+
+	m_world = Matrix::CreateRotationZ(cosf(time) * 2.f);
+
     elapsedTime;
 }
 
@@ -74,6 +79,8 @@ void Game::Render()
     Clear();
 
     // TODO: Add your rendering code here.
+	m_shape->Draw(m_world, m_view, m_proj);
+
 
     Present();
 }
@@ -164,6 +171,9 @@ void Game::CreateDevice()
     static const D3D_FEATURE_LEVEL featureLevels [] =
     {
         // TODO: Modify for supported Direct3D feature levels
+
+
+
         D3D_FEATURE_LEVEL_11_1,
         D3D_FEATURE_LEVEL_11_0,
         D3D_FEATURE_LEVEL_10_1,
@@ -172,6 +182,10 @@ void Game::CreateDevice()
         D3D_FEATURE_LEVEL_9_2,
         D3D_FEATURE_LEVEL_9_1,
     };
+
+	
+
+	m_world = Matrix::Identity;
 
     // Create the DX11 API device object, and get a corresponding context.
     ComPtr<ID3D11Device> device;
@@ -217,6 +231,8 @@ void Game::CreateDevice()
     DX::ThrowIfFailed(context.As(&m_d3dContext));
 
     // TODO: Initialize device dependent objects here (independent of window size).
+	m_shape = GeometricPrimitive::CreateSphere(m_d3dContext.Get());
+
 }
 
 // Allocate all memory resources that change on a window SizeChanged event.
@@ -313,6 +329,12 @@ void Game::CreateResources()
     DX::ThrowIfFailed(m_d3dDevice->CreateDepthStencilView(depthStencil.Get(), &depthStencilViewDesc, m_depthStencilView.ReleaseAndGetAddressOf()));
 
     // TODO: Initialize windows-size dependent objects here.
+
+	m_view = Matrix::CreateLookAt(Vector3(2.f, 2.f, 2.f),
+		Vector3::Zero, Vector3::UnitY);
+	m_proj = Matrix::CreatePerspectiveFieldOfView(XM_PI / 4.f,
+		float(backBufferWidth) / float(backBufferHeight), 0.1f, 10.f);
+
 }
 
 void Game::OnDeviceLost()
@@ -324,6 +346,9 @@ void Game::OnDeviceLost()
     m_swapChain.Reset();
     m_d3dContext.Reset();
     m_d3dDevice.Reset();
+
+	m_shape.reset();
+
 
     CreateDevice();
 

@@ -1,7 +1,4 @@
-﻿  pch.cpp
-  Main.cpp
-  Game.cpp
-  Generating Code...
-     Creating library D:\SandDissertation\Direct3D Win32 Game1\Debug\Direct3D Win32 Game1.lib and object D:\SandDissertation\Direct3D Win32 Game1\Debug\Direct3D Win32 Game1.exp
+﻿  Game.cpp
+cl : Command line warning D9028: minimal rebuild failure, reverting to normal build
   Direct3D Win32 Game1.vcxproj -> D:\SandDissertation\Direct3D Win32 Game1\Debug\Direct3D Win32 Game1.exe
   Direct3D Win32 Game1.vcxproj -> D:\SandDissertation\Direct3D Win32 Game1\Debug\Direct3D Win32 Game1.pdb (Partial PDB)

@@ -5,7 +5,9 @@
 #pragma once
 
 #include "StepTimer.h"
-
+#include "DirectXHelpers.h"
+#include "GeometricPrimitive.h"
+#include "SimpleMath.h"
 
 // A basic game implementation that creates a D3D11 device and
 // provides a game loop.
@@ -59,4 +61,9 @@ private:
 
     // Rendering loop timer.
     DX::StepTimer                                   m_timer;
+
+	DirectX::SimpleMath::Matrix m_world;
+	DirectX::SimpleMath::Matrix m_view;
+	DirectX::SimpleMath::Matrix m_proj;
+	std::unique_ptr<DirectX::GeometricPrimitive> m_shape;
 };
