@@ -62,7 +62,6 @@ void Game::Update(DX::StepTimer const& timer)
 
 	float time = float(timer.GetTotalSeconds());
 
-	m_world = Matrix::CreateRotationZ(cosf(time) * 2.f);
 
     elapsedTime;
 }
@@ -80,8 +79,51 @@ void Game::Render()
 
     // TODO: Add your rendering code here.
 	m_shape->Draw(m_world, m_view, m_proj);
+	m_d3dContext->OMSetBlendState(m_states->Opaque(), nullptr, 0xFFFFFFFF);
+	m_d3dContext->OMSetDepthStencilState(m_states->DepthNone(), 0);
+	m_d3dContext->RSSetState(m_states->CullNone());
 
+	m_effect->SetWorld(m_world);
 
+	m_effect->Apply(m_d3dContext.Get());
+
+	m_d3dContext->IASetInputLayout(m_inputLayout.Get());
+
+	m_batch->Begin();
+
+	Vector3 xaxis(2.f, 0.f, 0.f);
+	Vector3 yaxis(0.f, 0.f, 2.f);
+	Vector3 origin = Vector3::Zero;
+
+	size_t divisions = 20;
+
+	for (size_t i = 0; i <= divisions; ++i)
+	{
+		float fPercent = float(i) / float(divisions);
+		fPercent = (fPercent * 2.0f) - 1.0f;
+
+		Vector3 scale = xaxis * fPercent + origin;
+
+		VertexPositionColor v1(scale - yaxis, Colors::White);
+		VertexPositionColor v2(scale + yaxis, Colors::White);
+		m_batch->DrawLine(v1, v2);
+	}
+
+	for (size_t i = 0; i <= divisions; i++)
+	{
+		float fPercent = float(i) / float(divisions);
+		fPercent = (fPercent * 2.0f) - 1.0f;
+
+		Vector3 scale = yaxis * fPercent + origin;
+
+		VertexPositionColor v1(scale - xaxis, Colors::White);
+		VertexPositionColor v2(scale + xaxis, Colors::White);
+		m_batch->DrawLine(v1, v2);
+	}
+
+	m_batch->End();
+
+	TwDraw();
     Present();
 }
 
@@ -231,7 +273,34 @@ void Game::CreateDevice()
     DX::ThrowIfFailed(context.As(&m_d3dContext));
 
     // TODO: Initialize device dependent objects here (independent of window size).
-	m_shape = GeometricPrimitive::CreateSphere(m_d3dContext.Get());
+	
+	m_states = std::make_unique<CommonStates>(m_d3dDevice.Get());
+
+	m_effect = std::make_unique<BasicEffect>(m_d3dDevice.Get());
+	m_effect->SetVertexColorEnabled(true);
+
+	void const* shaderByteCode;
+	size_t byteCodeLength;
+
+	m_effect->GetVertexShaderBytecode(&shaderByteCode, &byteCodeLength);
+
+	DX::ThrowIfFailed(
+		m_d3dDevice->CreateInputLayout(VertexPositionColor::InputElements,
+			VertexPositionColor::InputElementCount,
+			shaderByteCode, byteCodeLength,
+			m_inputLayout.ReleaseAndGetAddressOf()));
+
+	m_batch = std::make_unique<PrimitiveBatch<VertexPositionColor>>(m_d3dContext.Get());
+
+	m_shape = GeometricPrimitive::CreateSphere(m_d3dContext.Get(), 3);
+
+	TwInit(TW_DIRECT3D11, device.Get());
+	TwWindowSize(1000, 1000);
+
+	TwBar *myBar;
+	myBar = TwNewBar("NameOfMyTweakBar");
+
+
 
 }
 
@@ -334,6 +403,9 @@ void Game::CreateResources()
 		Vector3::Zero, Vector3::UnitY);
 	m_proj = Matrix::CreatePerspectiveFieldOfView(XM_PI / 4.f,
 		float(backBufferWidth) / float(backBufferHeight), 0.1f, 10.f);
+
+	m_effect->SetView(m_view);
+	m_effect->SetProjection(m_proj);
 
 }
 

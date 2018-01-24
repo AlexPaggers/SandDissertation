@@ -111,7 +111,10 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 // Windows procedure
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-    PAINTSTRUCT ps;
+	if (TwEventWin(hWnd, message, wParam, lParam)) // send event message to AntTweakBar
+		return 0;
+	
+	PAINTSTRUCT ps;
     HDC hdc;
 
     static bool s_in_sizemove = false;
@@ -266,5 +269,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 // Exit helper
 void ExitGame()
 {
+	TwTerminate();
     PostQuitMessage(0);
 }
