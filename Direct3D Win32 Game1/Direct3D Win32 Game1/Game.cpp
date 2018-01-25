@@ -4,6 +4,7 @@
 
 #include "pch.h"
 #include "Game.h"
+#include <time.h>
 
 extern void ExitGame();
 
@@ -26,7 +27,12 @@ Game::Game() :
 // Initialize the Direct3D resources required to run.
 void Game::Initialize(HWND window, int width, int height)
 {
-    m_window = window;
+	m_GD = std::make_unique<GameData>();
+	
+	float AR = (float)width / (float)height;
+	m_cam = new Camera(0.25f * XM_PI, AR, 1.0f, 10000.0f, Vector3::UnitY, Vector3::Zero);
+
+	m_window = window;
     m_outputWidth = std::max(width, 1);
     m_outputHeight = std::max(height, 1);
 
@@ -45,10 +51,27 @@ void Game::Initialize(HWND window, int width, int height)
 // Executes the basic game loop.
 void Game::Tick()
 {
-    m_timer.Tick([&]()
+	m_cam->SetPos(Vector3(getcamerax(), getcameray(), getcameraz()));
+
+	DWORD currentTime = GetTickCount();
+	m_GD->m_dt =  std::min((float)(currentTime - m_totalplayTime) / 1000.0f, 0.1f);
+	m_totalplayTime = currentTime;
+	
+	m_timer.Tick([&]()
     {
         Update(m_timer);
     });
+
+
+	m_cam->Tick(m_GD.get());
+
+	for (auto& object : m_objects)
+	{
+		object->tick(m_GD.get());
+		m_world *= object->GetWorldMatrix();
+	}
+
+	m_world *= m_cam->GetWorldMatrix();
 
     Render();
 }
@@ -78,7 +101,12 @@ void Game::Render()
     Clear();
 
     // TODO: Add your rendering code here.
-	m_shape->Draw(m_world, m_view, m_proj);
+	for (auto& object : m_objects)
+	{
+		object->GetShape()->Draw(object->GetWorldMatrix(), m_cam->GetView(), m_cam->GetProj(), object->getColor());
+	}
+
+	//m_shape->Draw(m_world, m_view, m_proj);
 	m_d3dContext->OMSetBlendState(m_states->Opaque(), nullptr, 0xFFFFFFFF);
 	m_d3dContext->OMSetDepthStencilState(m_states->DepthNone(), 0);
 	m_d3dContext->RSSetState(m_states->CullNone());
@@ -201,6 +229,27 @@ void Game::GetDefaultSize(int& width, int& height) const
     height = 600;
 }
 
+void Game::AddSand()
+{
+	m_selectedcolor.x = m_TWselectedcolor[0];
+	m_selectedcolor.y = m_TWselectedcolor[1];
+	m_selectedcolor.z = m_TWselectedcolor[2];
+
+	m_selecteddirection.x = m_TWselecteddirection[0];
+	m_selecteddirection.y = m_TWselecteddirection[1];
+	m_selecteddirection.z = m_TWselecteddirection[2];
+
+	m_objects.push_back(new GameObject(m_d3dContext.Get(), m_selectedfriction, m_selecteddirection, m_selectedsize, m_selectedcolor));
+}
+
+
+void TW_CALL SandCallback(void* clientData)
+{
+	// do something
+	Game* game = static_cast<Game*>(clientData);
+	game->AddSand();
+}
+
 // These are the resources that depend on the device.
 void Game::CreateDevice()
 {
@@ -292,17 +341,22 @@ void Game::CreateDevice()
 
 	m_batch = std::make_unique<PrimitiveBatch<VertexPositionColor>>(m_d3dContext.Get());
 
-	m_shape = GeometricPrimitive::CreateSphere(m_d3dContext.Get(), 3);
+	//Tweak Bar Stuff
 
 	TwInit(TW_DIRECT3D11, device.Get());
 	TwWindowSize(1000, 1000);
 
 	TwBar *myBar;
 	myBar = TwNewBar("NameOfMyTweakBar");
-
-
+	TwAddVarRW(myBar, "Friction", TW_TYPE_FLOAT, &m_selectedfriction, "Min = 0, Max=1, step=0.05");
+	TwAddVarRW(myBar, "Diameter", TW_TYPE_FLOAT, &m_selectedsize, "");
+	TwAddVarRW(myBar, "Colour", TW_TYPE_COLOR3F, &m_TWselectedcolor, "");
+	TwAddVarRW(myBar, "Direction", TW_TYPE_DIR3F, &m_TWselecteddirection, "");
+	TwAddButton(myBar, "Create Sand", SandCallback, this, "label='Create a new grain of sand'");
+	
 
 }
+
 
 // Allocate all memory resources that change on a window SizeChanged event.
 void Game::CreateResources()
@@ -419,7 +473,7 @@ void Game::OnDeviceLost()
     m_d3dContext.Reset();
     m_d3dDevice.Reset();
 
-	m_shape.reset();
+
 
 
     CreateDevice();

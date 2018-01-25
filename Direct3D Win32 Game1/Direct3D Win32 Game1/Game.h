@@ -11,7 +11,11 @@
 #include "SimpleMath.h"
 #include "CommonStates.h"
 #include "PrimitiveBatch.h"
+#include "GameObject.h"
+#include "GameData.h"
+#include "Camera.h"
 
+#include <vector>
 #include <AntTweakBar.h>
 
 // A basic game implementation that creates a D3D11 device and
@@ -37,6 +41,8 @@ public:
 
     // Properties
     void GetDefaultSize( int& width, int& height ) const;
+
+	void AddSand();
 
 private:
 
@@ -75,6 +81,36 @@ private:
 	std::unique_ptr<DirectX::CommonStates> m_states;
 	std::unique_ptr<DirectX::BasicEffect> m_effect;
 	Microsoft::WRL::ComPtr<ID3D11InputLayout> m_inputLayout;
-	std::unique_ptr<DirectX::GeometricPrimitive> m_shape;
+	
 	std::unique_ptr<DirectX::PrimitiveBatch<DirectX::VertexPositionColor>> m_batch;
+
+	std::vector<GameObject*> m_objects;
+	std::unique_ptr<GameData> m_GD;
+
+	Camera* m_cam;
+
+	Color m_selectedcolor;
+	float m_TWselectedcolor[3] = { 0.0f , 0.0f, 0.0f };
+	float m_selectedfriction = 0;
+	float m_selectedsize = 0;
+	float m_TWselecteddirection[3] = { 0.0f,0.0f,0.0f };
+	Vector3 m_selecteddirection;
+
+
+	DWORD m_totalplayTime;
+
+	float camera_x = 0;
+	float camera_y = 0;
+	float camera_z = 50;
+
+
+	float getcamerax() { return camera_x; }
+	void setcamerax(float _camerax) { camera_x = _camerax; }
+
+	float getcameray() { return camera_y; }
+	void setcameray(float _cameray) { camera_y = _cameray; }
+
+	float getcameraz() { return camera_z; }
+	void setcameraz(float _cameraz) { camera_z = _cameraz; }
+
 };
