@@ -12,6 +12,7 @@
 #include "CommonStates.h"
 #include "PrimitiveBatch.h"
 #include "GameObject.h"
+#include "CollisionManager.h"
 #include "GameData.h"
 #include "Camera.h"
 
@@ -86,6 +87,8 @@ private:
 
 	std::vector<GameObject*> m_objects;
 	std::unique_ptr<GameData> m_GD;
+
+	std::unique_ptr<CollisionManager> m_collisionManager;
 
 	Camera* m_cam;
 

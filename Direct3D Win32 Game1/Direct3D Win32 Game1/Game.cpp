@@ -29,8 +29,12 @@ void Game::Initialize(HWND window, int width, int height)
 {
 	m_GD = std::make_unique<GameData>();
 	
+	m_collisionManager = std::make_unique<CollisionManager>();
+
 	float AR = (float)width / (float)height;
 	m_cam = new Camera(0.25f * XM_PI, AR, 1.0f, 10000.0f, Vector3::UnitY, Vector3::Zero);
+
+
 
 	m_window = window;
     m_outputWidth = std::max(width, 1);
@@ -70,6 +74,8 @@ void Game::Tick()
 		object->tick(m_GD.get());
 		m_world *= object->GetWorldMatrix();
 	}
+
+	m_collisionManager->CheckCollisions();
 
 	m_world *= m_cam->GetWorldMatrix();
 
@@ -239,7 +245,17 @@ void Game::AddSand()
 	m_selecteddirection.y = m_TWselecteddirection[1];
 	m_selecteddirection.z = m_TWselecteddirection[2];
 
-	m_objects.push_back(new GameObject(m_d3dContext.Get(), m_selectedfriction, m_selecteddirection, m_selectedsize, m_selectedcolor));
+	if (m_selectedsize > 0)
+	{
+		GameObject *_newParticle = new GameObject(	m_d3dContext.Get(), 
+													m_selectedfriction, 
+													m_selecteddirection, 
+													m_selectedsize, 
+													m_selectedcolor);
+		m_objects.push_back(_newParticle);
+		m_collisionManager->AddObject(_newParticle);
+	}
+
 }
 
 
@@ -349,7 +365,7 @@ void Game::CreateDevice()
 	TwBar *myBar;
 	myBar = TwNewBar("NameOfMyTweakBar");
 	TwAddVarRW(myBar, "Friction", TW_TYPE_FLOAT, &m_selectedfriction, "Min = 0, Max=1, step=0.05");
-	TwAddVarRW(myBar, "Diameter", TW_TYPE_FLOAT, &m_selectedsize, "");
+	TwAddVarRW(myBar, "Diameter", TW_TYPE_FLOAT, &m_selectedsize, "Min = 0, step = 0.005");
 	TwAddVarRW(myBar, "Colour", TW_TYPE_COLOR3F, &m_TWselectedcolor, "");
 	TwAddVarRW(myBar, "Direction", TW_TYPE_DIR3F, &m_TWselecteddirection, "");
 	TwAddButton(myBar, "Create Sand", SandCallback, this, "label='Create a new grain of sand'");
