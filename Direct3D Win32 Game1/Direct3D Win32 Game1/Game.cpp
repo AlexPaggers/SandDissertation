@@ -76,6 +76,7 @@ void Game::Tick()
 	}
 
 	m_collisionManager->CheckCollisions();
+	m_collisionManager->UpdateCollisions();
 
 	m_world *= m_cam->GetWorldMatrix();
 
@@ -250,7 +251,8 @@ void Game::AddSand()
 		GameObject *_newParticle = new GameObject(	m_d3dContext.Get(), 
 													m_selectedfriction, 
 													m_selecteddirection, 
-													m_selectedsize, 
+													m_selectedsize,
+													m_selectedmass,
 													m_selectedcolor);
 		m_objects.push_back(_newParticle);
 		m_collisionManager->AddObject(_newParticle);
@@ -261,7 +263,6 @@ void Game::AddSand()
 
 void TW_CALL SandCallback(void* clientData)
 {
-	// do something
 	Game* game = static_cast<Game*>(clientData);
 	game->AddSand();
 }
@@ -365,6 +366,7 @@ void Game::CreateDevice()
 	TwBar *myBar;
 	myBar = TwNewBar("NameOfMyTweakBar");
 	TwAddVarRW(myBar, "Friction", TW_TYPE_FLOAT, &m_selectedfriction, "Min = 0, Max=1, step=0.05");
+	TwAddVarRW(myBar, "Mass", TW_TYPE_FLOAT, &m_selectedmass, "Min = 0, step = 0.005");
 	TwAddVarRW(myBar, "Diameter", TW_TYPE_FLOAT, &m_selectedsize, "Min = 0, step = 0.005");
 	TwAddVarRW(myBar, "Colour", TW_TYPE_COLOR3F, &m_TWselectedcolor, "");
 	TwAddVarRW(myBar, "Direction", TW_TYPE_DIR3F, &m_TWselecteddirection, "");

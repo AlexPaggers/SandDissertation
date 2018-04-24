@@ -93,9 +93,10 @@ private:
 	Camera* m_cam;
 
 	Color m_selectedcolor;
-	float m_TWselectedcolor[3] = { 0.0f , 0.0f, 0.0f };
-	float m_selectedfriction = 0;
-	float m_selectedsize = 0;
+	float m_TWselectedcolor[3] = { 0.76f , 0.60f, 0.50f };
+	float m_selectedfriction = 0.05f;
+	float m_selectedsize = 1;
+	float m_selectedmass = 1;
 	float m_TWselecteddirection[3] = { 0.0f,0.0f,0.0f };
 	Vector3 m_selecteddirection;
 

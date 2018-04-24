@@ -26,25 +26,11 @@ void CollisionManager::CheckCollisions()
 			{
 				if (object1 != object2)
 				{
-					float onedistancyboi;
+					float onedistancyboi = 0;
 					onedistancyboi = Vector3::Distance(object1->GetPos(), object2->GetPos());
 					if (onedistancyboi < 
 						object1->getDiameter()/2 + object2->getDiameter()/2)
 					{
-						//bool meme = false;
-
-						//Vector3 baseX = object1->GetPos() - object2->GetPos();
-						//baseX.Normalize();
-
-						//Vector3 vec1 = object1->GetVelocity();
-
-						//float X1 = baseX.Dot(vec1);
-
-						//vec1.x = baseX * X1;
-
-						//vecV1.x = baseX.x * X1.x;
-
-						//vecV1.y = vecV1 - vecV1.x;
 
 						Vector3 U1x, U1y, U2x, U2y, V1x, V1y, V2x, V2y;
 
@@ -59,14 +45,14 @@ void CollisionManager::CheckCollisions()
 						x1 = baseX.Dot(v1);
 						v1x = baseX * x1;
 						v1y = v1 - v1x;
-						m1 = 1;
+						m1 = object1->getMass();
 
 						baseX = baseX*-1;
 						v2 = object2->GetVelocity();
 						x2 = baseX.Dot(v2);
 						v2x = baseX * x2;
 						v2y = v2 - v2x;
-						m2 = 1;
+						m2 = object2->getMass();
 
 
 						
@@ -78,11 +64,9 @@ void CollisionManager::CheckCollisions()
 						newVel2 += v2x * (m2 - m1) / (m1 + m2);
 						newVel2 += v2y;
 
-						//Vector3 newVel1 = Vector3(v1x / v2x  * 0.5f + v1y);
-						//Vector3 newVel2 = Vector3(v1x + v2x / v2y);
 
-						object1->SetVelocity(newVel1);
-						object2->SetVelocity(newVel2);
+						object1->SetBufferedVelocity(object1->GetBufferedVelocity() + newVel1);
+						//object2->SetBufferedVelocity(object2->GetBufferedVelocity() + newVel2);
 
 
 					}
@@ -94,7 +78,14 @@ void CollisionManager::CheckCollisions()
 
 void CollisionManager::UpdateCollisions()
 {
-
+	for (auto& object : m_objects)
+	{
+		if (object->GetBufferedVelocity() != Vector3::Zero)
+		{
+			object->SetVelocity(object->GetBufferedVelocity());
+			object->SetBufferedVelocity(Vector3::Zero);
+		}
+	}
 }
 
 void CollisionManager::AddObject(GameObject * _object)

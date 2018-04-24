@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "GameObject.h"
 
-GameObject::GameObject(ID3D11DeviceContext1 * _d3dDevice, float _friction, Vector3 _dir, float _diameter, Color _color)
+GameObject::GameObject(ID3D11DeviceContext1 * _d3dDevice, float _friction, Vector3 _dir, float _diameter, float _mass, Color _color)
 {
 	m_pos = Vector3::Zero;
 	
@@ -11,11 +11,12 @@ GameObject::GameObject(ID3D11DeviceContext1 * _d3dDevice, float _friction, Vecto
 	m_shape = DirectX::GeometricPrimitive::CreateSphere(_d3dDevice, _diameter, 9);
 
 	m_diameter = _diameter;
+	m_mass = _mass;
 	m_friction = _friction;
 	m_color = _color;
 
 	m_vel += _dir;
-	m_acc.y = -10;
+	//m_acc.y = -10;
 	
 }
 
@@ -51,5 +52,6 @@ void GameObject::tick(GameData*  _GD)
 	m_worldMat = m_fudge * transMat;
 
 	//m_acc = Vector3::Zero;
+
 
 }
