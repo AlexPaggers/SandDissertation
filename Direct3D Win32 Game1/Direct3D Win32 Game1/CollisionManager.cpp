@@ -35,7 +35,7 @@ void CollisionManager:: CollisionManager::CheckCollisions()
 					if (_radii < object1->getDiameter()/2 + object2->getDiameter()/2)
 					{
 
-						//object1->SetColliding(true);
+						object1->SetColliding(true);
 
 
 						if (object1->GetPos().y != object2->GetPos().y)

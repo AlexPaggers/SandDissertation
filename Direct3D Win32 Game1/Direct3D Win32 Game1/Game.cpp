@@ -60,7 +60,8 @@ void Game::Tick()
 	DWORD currentTime = GetTickCount();
 	m_GD->m_dt =  std::min((float)(currentTime - m_totalplayTime) / 1000.0f, 0.1f);
 	m_totalplayTime = currentTime;
-	
+
+
 	m_timer.Tick([&]()
     {
         Update(m_timer);
@@ -159,6 +160,8 @@ void Game::Render()
 	}
 
 	m_batch->End();
+
+	m_GD->m_FPS = 1 / m_GD->m_dt;
 
 	TwDraw();
     Present();
@@ -368,12 +371,25 @@ void Game::CreateDevice()
 
 	TwBar *myBar;
 	myBar = TwNewBar("NameOfMyTweakBar");
+
+	int* meme = (int*)m_objects.size();
+
+	TwAddVarRW(myBar, "FPS", TW_TYPE_FLOAT, &m_GD->m_FPS, NULL);
+	TwAddVarRW(myBar, "Particle Count", TW_TYPE_FLOAT, &meme, NULL);
+
+	TwAddSeparator(myBar, "", NULL);
+
 	TwAddVarRW(myBar, "Friction", TW_TYPE_FLOAT, &m_selectedfriction, "Min = 0, Max=1, step=0.05");
 	TwAddVarRW(myBar, "Mass", TW_TYPE_FLOAT, &m_selectedmass, "Min = 0, step = 0.005");
 	TwAddVarRW(myBar, "Diameter", TW_TYPE_FLOAT, &m_selectedsize, "Min = 0, step = 0.005");
 	TwAddVarRW(myBar, "Colour", TW_TYPE_COLOR3F, &m_TWselectedcolor, "");
 	TwAddVarRW(myBar, "Direction", TW_TYPE_DIR3F, &m_TWselecteddirection, "");
 	TwAddButton(myBar, "Create Sand", SandCallback, this, "label='Create a new grain of sand'");
+
+	TwAddSeparator(myBar, "", NULL);
+	TwAddVarRW(myBar, "Box Size X", TW_TYPE_FLOAT, &m_GD->m_xWall, "Min = 5, Max=15, step=0.1");
+	TwAddVarRW(myBar, "Box Size Y", TW_TYPE_FLOAT, &m_GD->m_yWall, "Min = 5, Max=15, step=0.1");
+	TwAddVarRW(myBar, "Box Size Z", TW_TYPE_FLOAT, &m_GD->m_zWall, "Min = 5, Max=15, step=0.1");
 	
 
 }

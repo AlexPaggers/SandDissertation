@@ -8,7 +8,7 @@ GameObject::GameObject(ID3D11DeviceContext1 * _d3dDevice, int _ID, float _fricti
 	m_worldMat = Matrix::Identity;
 	m_fudge = Matrix::Identity;
 
-	m_shape = DirectX::GeometricPrimitive::CreateSphere(_d3dDevice, _diameter, 9);
+	m_shape = DirectX::GeometricPrimitive::CreateSphere(_d3dDevice, _diameter, 3);
 
 	m_ID = _ID;
 	m_diameter = _diameter;
@@ -25,60 +25,44 @@ GameObject::GameObject(ID3D11DeviceContext1 * _d3dDevice, int _ID, float _fricti
 void GameObject::tick(GameData*  _GD)
 {
 	//DO THE CHECKING THING
-	if (m_pos.y <= -10)
+	if (m_pos.y <= -_GD->m_yWall ||
+		m_pos.x <= -_GD->m_xWall ||
+		m_pos.x >= _GD->m_xWall ||
+		m_pos.z <= -_GD->m_zWall ||
+		m_pos.z >= _GD->m_zWall
+		)
 	{
-		m_pos.y = -10;
-		m_vel.y = 0;
-
 		m_colliding = true;
 
-	}
-	else
-	{
-		m_colliding = false;
-	}
-	if (m_pos.x <= -10)
-	{
-		m_pos.x = -10;
-		m_vel.x = 0;
+		if (m_pos.y <= -_GD->m_yWall)
+		{
+			m_vel.y = 0;
+			m_pos.y = -_GD->m_yWall;
+		}
 
-		m_colliding = true;
+		if (m_pos.x <= -_GD->m_xWall)
+		{
+			m_vel.x = 0;
+			m_pos.x = -_GD->m_xWall;
+		}
 
-	}
-	else
-	{
-		m_colliding = false;
-	}
-	if (m_pos.x >= 10)
-	{
-		m_pos.x = 10;
-		m_vel.x = 0;
+		if (m_pos.x >= _GD->m_xWall)
+		{
+			m_vel.x = 0;
+			m_pos.x = _GD->m_xWall;
+		}
 
-		m_colliding = true;
+		if (m_pos.z <= -_GD->m_zWall)
+		{
+			m_vel.z = 0;
+			m_pos.z = -_GD->m_zWall;
+		}
 
-	}
-	else
-	{
-		m_colliding = false;
-	}
-	if (m_pos.z <= -10)
-	{
-		m_pos.z = -10;
-		m_vel.z = 0;
-
-		m_colliding = true;
-
-	}
-	else
-	{
-		m_colliding = false;
-	}
-	if (m_pos.z >= 10)
-	{		  
-		m_pos.z = 10;
-		m_vel.z = 0;
-
-		m_colliding = true;
+		if (m_pos.z >= _GD->m_zWall)
+		{
+			m_vel.z = 0;
+			m_pos.z = _GD->m_zWall;
+		}
 
 	}
 	else
