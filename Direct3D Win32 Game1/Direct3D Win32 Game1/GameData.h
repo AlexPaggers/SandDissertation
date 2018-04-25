@@ -16,5 +16,7 @@ struct GameData
 	float m_yWall = 10;
 	float m_xWall = 10;
 
+	float m_sandyloops = 1;
+
 };
 #endif

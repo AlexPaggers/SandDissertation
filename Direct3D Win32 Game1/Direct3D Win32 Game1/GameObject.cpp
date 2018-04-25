@@ -70,7 +70,12 @@ void GameObject::tick(GameData*  _GD)
 		m_colliding = false;
 	}
 
-	if (m_colliding)
+	if (m_collidedObjects.size() == 0)
+	{
+		m_particleColliding = false;
+	}
+
+	if (m_colliding || m_particleColliding)
 	{
 		m_vel += m_acc * _GD->m_dt;
 		m_vel *=  (1 - m_friction);

@@ -1,0 +1,13 @@
+﻿  pch.cpp
+  Camera.cpp
+  C:\Program Files (x86)\Windows Kits\10\Include\10.0.15063.0\um\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
+  CollisionManager.cpp
+  C:\Program Files (x86)\Windows Kits\10\Include\10.0.15063.0\um\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
+  Game.cpp
+  C:\Program Files (x86)\Windows Kits\10\Include\10.0.15063.0\um\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
+Game.cpp(264): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+  GameObject.cpp
+  C:\Program Files (x86)\Windows Kits\10\Include\10.0.15063.0\um\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
+  Main.cpp
+  C:\Program Files (x86)\Windows Kits\10\Include\10.0.15063.0\um\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
+LINK : fatal error LNK1104: cannot open file 'AntTweakBar64.lib'

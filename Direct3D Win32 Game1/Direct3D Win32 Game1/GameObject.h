@@ -40,6 +40,7 @@ public:
 	Color		getColor()						{ return m_color; }
 
 	bool		getColliding()					{ return m_colliding; }
+	bool		getParticleColliding()			{ return m_particleColliding; }
 	float		getDiameter()					{ return m_diameter; }
 	float		getMass()						{ return m_mass; }
 
@@ -48,7 +49,9 @@ public:
 	void		SetVelocity(Vector3 _velocity)	{ m_vel = _velocity; }
 	void		SetBufferedVelocity(Vector3 _bufferedvelocity) { m_vel = _bufferedvelocity; }
 	void		SetAcceleration(Vector3 _acc)	{ m_acc = _acc; }
+
 	void		SetColliding(bool _colliding)	{ m_colliding = _colliding; }
+	void		SetParticleColliding(bool _particlecolliding) { m_particleColliding = _particlecolliding; }
 
 private:
 
@@ -70,6 +73,7 @@ private:
 	std::vector<int> m_collidedObjects;
 
 	bool m_colliding;
+	bool m_particleColliding;
 
 	std::unique_ptr<DirectX::GeometricPrimitive> m_shape;
 	

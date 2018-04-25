@@ -1,0 +1,11 @@
+﻿  Game.cpp
+  C:\Program Files (x86)\Windows Kits\10\Include\10.0.15063.0\um\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
+Game.cpp(248): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+     Creating library D:\SandDissertation\Direct3D Win32 Game1\Release\Direct3D Win32 Game1.lib and object D:\SandDissertation\Direct3D Win32 Game1\Release\Direct3D Win32 Game1.exp
+  Generating code
+  2 of 546 functions ( 0.4%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    1 functions had inline decision re-evaluated but remain unchanged
+  Finished generating code
+  Direct3D Win32 Game1.vcxproj -> D:\SandDissertation\Direct3D Win32 Game1\Release\Direct3D Win32 Game1.exe
+  Direct3D Win32 Game1.vcxproj -> D:\SandDissertation\Direct3D Win32 Game1\Release\Direct3D Win32 Game1.pdb (Full PDB)

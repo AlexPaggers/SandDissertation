@@ -1,4 +1,4 @@
-﻿  Game.cpp
+﻿  GameObject.cpp
   c:\program files (x86)\windows kits\10\include\10.0.15063.0\um\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
   Direct3D Win32 Game1.vcxproj -> D:\SandDissertation\Direct3D Win32 Game1\Debug\Direct3D Win32 Game1.exe
   Direct3D Win32 Game1.vcxproj -> D:\SandDissertation\Direct3D Win32 Game1\Debug\Direct3D Win32 Game1.pdb (Partial PDB)

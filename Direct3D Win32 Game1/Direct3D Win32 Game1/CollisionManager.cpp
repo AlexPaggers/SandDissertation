@@ -35,7 +35,7 @@ void CollisionManager:: CollisionManager::CheckCollisions()
 					if (_radii < object1->getDiameter()/2 + object2->getDiameter()/2)
 					{
 
-						object1->SetColliding(true);
+						object1->SetParticleColliding(true);
 
 
 						if (object1->GetPos().y != object2->GetPos().y)
@@ -71,7 +71,7 @@ void CollisionManager:: CollisionManager::CheckCollisions()
 
 						baseX = object1->GetPos() - object2->GetPos();
 
-						baseX.Normalize();
+						baseX.Normalize(); 
 						v1 = object1->GetVelocity();
 						x1 = baseX.Dot(v1);
 						v1x = baseX * x1;
@@ -101,20 +101,8 @@ void CollisionManager:: CollisionManager::CheckCollisions()
 
 
 
-
-						
-						
-						
-						
-						
-
-
 						object1->AddCollidedObject(object2->GetID());
 
-					}
-					else
-					{
-						//object1->SetColliding(false);
 					}
 				}
 			}

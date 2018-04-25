@@ -4,6 +4,7 @@
 
 #include "pch.h"
 #include "Game.h"
+#include <stdlib.h>
 #include <time.h>
 
 extern void ExitGame();
@@ -243,25 +244,40 @@ void Game::GetDefaultSize(int& width, int& height) const
 
 void Game::AddSand()
 {
-	m_selectedcolor.x = m_TWselectedcolor[0];
-	m_selectedcolor.y = m_TWselectedcolor[1];
-	m_selectedcolor.z = m_TWselectedcolor[2];
 
-	m_selecteddirection.x = m_TWselecteddirection[0];
-	m_selecteddirection.y = m_TWselecteddirection[1];
-	m_selecteddirection.z = m_TWselecteddirection[2];
+	srand(time(NULL));
 
-	if (m_selectedsize > 0)
+	for (int i = 0; i < m_GD->m_sandyloops; i++)
 	{
-		GameObject *_newParticle = new GameObject(	m_d3dContext.Get(), 
-													m_objects.size(),
-													m_selectedfriction, 
-													m_selecteddirection, 
-													m_selectedsize,
-													m_selectedmass,
-													m_selectedcolor);
-		m_objects.push_back(_newParticle);
-		m_collisionManager->AddObject(_newParticle);
+
+		float _tempRandOffsetx;
+		float _tempRandOffsety;
+		float _tempRandOffsetz;
+
+		_tempRandOffsetx = ((rand() % 10)) - 5.0f;
+		_tempRandOffsety = ((rand() % 10)) - 5.0f;
+		_tempRandOffsetz = ((rand() % 10)) - 5.0f;
+
+		m_selectedcolor.x = m_TWselectedcolor[0];
+		m_selectedcolor.y = m_TWselectedcolor[1];
+		m_selectedcolor.z = m_TWselectedcolor[2];
+
+		m_selecteddirection.x = m_TWselecteddirection[0] + _tempRandOffsetx;
+		m_selecteddirection.y = m_TWselecteddirection[1] + _tempRandOffsety;
+		m_selecteddirection.z = m_TWselecteddirection[2] + _tempRandOffsetz;
+
+		if (m_selectedsize > 0)
+		{
+			GameObject *_newParticle = new GameObject(m_d3dContext.Get(),
+				m_objects.size(),
+				m_selectedfriction,
+				m_selecteddirection,
+				m_selectedsize,
+				m_selectedmass,
+				m_selectedcolor);
+			m_objects.push_back(_newParticle);
+			m_collisionManager->AddObject(_newParticle);
+		}
 	}
 
 }
@@ -286,8 +302,6 @@ void Game::CreateDevice()
     {
         // TODO: Modify for supported Direct3D feature levels
 
-
-
         D3D_FEATURE_LEVEL_11_1,
         D3D_FEATURE_LEVEL_11_0,
         D3D_FEATURE_LEVEL_10_1,
@@ -295,6 +309,7 @@ void Game::CreateDevice()
         D3D_FEATURE_LEVEL_9_3,
         D3D_FEATURE_LEVEL_9_2,
         D3D_FEATURE_LEVEL_9_1,
+
     };
 
 	
@@ -384,6 +399,9 @@ void Game::CreateDevice()
 	TwAddVarRW(myBar, "Diameter", TW_TYPE_FLOAT, &m_selectedsize, "Min = 0, step = 0.005");
 	TwAddVarRW(myBar, "Colour", TW_TYPE_COLOR3F, &m_TWselectedcolor, "");
 	TwAddVarRW(myBar, "Direction", TW_TYPE_DIR3F, &m_TWselecteddirection, "");
+
+	TwAddSeparator(myBar, "", NULL);
+	TwAddVarRW(myBar, "How many sand particles", TW_TYPE_FLOAT, &m_GD->m_sandyloops, "Min = 1, Max=100, step=1");
 	TwAddButton(myBar, "Create Sand", SandCallback, this, "label='Create a new grain of sand'");
 
 	TwAddSeparator(myBar, "", NULL);
