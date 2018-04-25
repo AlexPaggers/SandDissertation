@@ -16,21 +16,52 @@ CollisionManager::~CollisionManager()
 
 }
 
-void CollisionManager::CheckCollisions()
+void CollisionManager:: CollisionManager::CheckCollisions()
 {
 	if (m_objects.size() > 1)
 	{
-		for (auto& object1 : m_objects)
+		for (auto& object1 : m_objects )
 		{
 			for (auto& object2 : m_objects)
 			{
-				if (object1 != object2)
+				
+				if (object1 != object2 &&
+					object2->CheckForPreviousCollision(object1->GetID()) == false)
 				{
-					float onedistancyboi = 0;
-					onedistancyboi = Vector3::Distance(object1->GetPos(), object2->GetPos());
-					if (onedistancyboi < 
-						object1->getDiameter()/2 + object2->getDiameter()/2)
+					float _radii = 0;
+
+					_radii = Vector3::Distance(object1->GetPos(), object2->GetPos());
+
+					if (_radii < object1->getDiameter()/2 + object2->getDiameter()/2)
 					{
+
+						//object1->SetColliding(true);
+
+
+						if (object1->GetPos().y != object2->GetPos().y)
+						{
+							_radii = (object1->getDiameter() / 2 + object2->getDiameter() / 2) - Vector3::Distance(object1->GetPos(), object2->GetPos());
+
+							if (object1->GetPos().y < object2->GetPos().y)
+							{
+								Vector3 _direction = object2->GetPos() - object1->GetPos();
+								
+								_direction.Normalize();
+
+								object2->SetPos(object2->GetPos() + _direction * (_radii));
+
+							}
+							else if (object1->GetPos().y > object2->GetPos().y)
+							{
+								Vector3 _direction = object1->GetPos() - object2->GetPos();
+
+								_direction.Normalize();
+
+								object1->SetPos(object1->GetPos() + _direction * (_radii));
+
+							}
+						}
+
 
 						Vector3 U1x, U1y, U2x, U2y, V1x, V1y, V2x, V2y;
 
@@ -66,9 +97,24 @@ void CollisionManager::CheckCollisions()
 
 
 						object1->SetBufferedVelocity(object1->GetBufferedVelocity() + newVel1);
-						//object2->SetBufferedVelocity(object2->GetBufferedVelocity() + newVel2);
+						object2->SetBufferedVelocity(object2->GetBufferedVelocity() + newVel2);
 
 
+
+
+						
+						
+						
+						
+						
+
+
+						object1->AddCollidedObject(object2->GetID());
+
+					}
+					else
+					{
+						//object1->SetColliding(false);
 					}
 				}
 			}
@@ -84,7 +130,11 @@ void CollisionManager::UpdateCollisions()
 		{
 			object->SetVelocity(object->GetBufferedVelocity());
 			object->SetBufferedVelocity(Vector3::Zero);
+			
 		}
+
+		object->ClearCollidedObjects();
+
 	}
 }
 

@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "GameObject.h"
 
-GameObject::GameObject(ID3D11DeviceContext1 * _d3dDevice, float _friction, Vector3 _dir, float _diameter, float _mass, Color _color)
+GameObject::GameObject(ID3D11DeviceContext1 * _d3dDevice, int _ID, float _friction, Vector3 _dir, float _diameter, float _mass, Color _color)
 {
 	m_pos = Vector3::Zero;
 	
@@ -10,23 +10,73 @@ GameObject::GameObject(ID3D11DeviceContext1 * _d3dDevice, float _friction, Vecto
 
 	m_shape = DirectX::GeometricPrimitive::CreateSphere(_d3dDevice, _diameter, 9);
 
+	m_ID = _ID;
 	m_diameter = _diameter;
 	m_mass = _mass;
 	m_friction = _friction;
 	m_color = _color;
 
 	m_vel += _dir;
-	//m_acc.y = -10;
+
+	m_acc.y = -10;
 	
 }
 
 void GameObject::tick(GameData*  _GD)
 {
-
-	if (m_pos.y <= -5)
+	//DO THE CHECKING THING
+	if (m_pos.y <= -10)
 	{
-		m_pos.y = -5;
+		m_pos.y = -10;
 		m_vel.y = 0;
+
+		m_colliding = true;
+
+	}
+	else
+	{
+		m_colliding = false;
+	}
+	if (m_pos.x <= -10)
+	{
+		m_pos.x = -10;
+		m_vel.x = 0;
+
+		m_colliding = true;
+
+	}
+	else
+	{
+		m_colliding = false;
+	}
+	if (m_pos.x >= 10)
+	{
+		m_pos.x = 10;
+		m_vel.x = 0;
+
+		m_colliding = true;
+
+	}
+	else
+	{
+		m_colliding = false;
+	}
+	if (m_pos.z <= -10)
+	{
+		m_pos.z = -10;
+		m_vel.z = 0;
+
+		m_colliding = true;
+
+	}
+	else
+	{
+		m_colliding = false;
+	}
+	if (m_pos.z >= 10)
+	{		  
+		m_pos.z = 10;
+		m_vel.z = 0;
 
 		m_colliding = true;
 
@@ -54,4 +104,27 @@ void GameObject::tick(GameData*  _GD)
 	//m_acc = Vector3::Zero;
 
 
+}
+
+void GameObject::AddCollidedObject(int _objectID)
+{
+	m_collidedObjects.push_back(_objectID);
+}
+
+void GameObject::ClearCollidedObjects()
+{
+	m_collidedObjects.clear();
+}
+
+bool GameObject::CheckForPreviousCollision(int _objectID)
+{
+	for (auto& _ID : m_collidedObjects)
+	{
+		if (_ID == _objectID)
+		{
+			return true;
+		}
+	}
+
+	return false;
 }

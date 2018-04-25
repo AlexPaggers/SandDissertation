@@ -3,6 +3,7 @@
 #include "GameData.h"
 #include "GeometricPrimitive.h"
 #include "PrimitiveBatch.h"
+#include <vector>
 
 using namespace DirectX::SimpleMath;
 
@@ -10,6 +11,7 @@ class GameObject
 {
 public:
 	GameObject(	ID3D11DeviceContext1* _d3dDevice,
+				int _ID,
 				float _friction, 
 				Vector3 _dir, 
 				float _diameter,
@@ -19,21 +21,27 @@ public:
 
 	void tick(GameData* _GD);
 
+	void AddCollidedObject(int _objectID);
+	void ClearCollidedObjects();
+
+	bool CheckForPreviousCollision(int _objectID);
+
 	//Getters
 
 	Matrix GetWorldMatrix() { return m_worldMat; }
 
+	int			GetID()							{ return m_ID; }
 	Vector3		GetPos()						{ return m_pos; }
 	Vector3		GetVelocity()					{ return m_vel; }
 	Vector3		GetBufferedVelocity()			{ return m_bufferedVel; }
 	Vector3		GetAcceleration()				{ return m_acc; }
 	DirectX::GeometricPrimitive* GetShape()		{ return m_shape.get(); }
 
-	Color getColor() { return m_color; }
+	Color		getColor()						{ return m_color; }
 
-	bool	getColliding()	{ return m_colliding; }
-	float	getDiameter()	{ return m_diameter; }
-	float	getMass()		{ return m_mass; }
+	bool		getColliding()					{ return m_colliding; }
+	float		getDiameter()					{ return m_diameter; }
+	float		getMass()						{ return m_mass; }
 
 	//Setters
 	void		SetPos(Vector3 _pos)			{ m_pos = _pos; }
@@ -53,11 +61,13 @@ private:
 	Vector3 m_bufferedVel = Vector3::Zero;
 	Vector3 m_acc = Vector3::Zero;
 
+	int	m_ID;
 	float m_diameter;
 	float m_friction;
 	float m_mass;
 	Color m_color;
 
+	std::vector<int> m_collidedObjects;
 
 	bool m_colliding;
 

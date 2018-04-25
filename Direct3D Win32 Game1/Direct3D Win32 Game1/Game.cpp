@@ -69,14 +69,16 @@ void Game::Tick()
 
 	m_cam->Tick(m_GD.get());
 
+	m_collisionManager->CheckCollisions();
+	m_collisionManager->UpdateCollisions();
+
 	for (auto& object : m_objects)
 	{
 		object->tick(m_GD.get());
 		m_world *= object->GetWorldMatrix();
 	}
 
-	m_collisionManager->CheckCollisions();
-	m_collisionManager->UpdateCollisions();
+
 
 	m_world *= m_cam->GetWorldMatrix();
 
@@ -249,6 +251,7 @@ void Game::AddSand()
 	if (m_selectedsize > 0)
 	{
 		GameObject *_newParticle = new GameObject(	m_d3dContext.Get(), 
+													m_objects.size(),
 													m_selectedfriction, 
 													m_selecteddirection, 
 													m_selectedsize,

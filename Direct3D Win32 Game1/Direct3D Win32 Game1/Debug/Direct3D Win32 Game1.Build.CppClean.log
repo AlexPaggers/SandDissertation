@@ -2,8 +2,28 @@ d:\sanddissertation\direct3d win32 game1\direct3d win32 game1\debug\direct3d win
 d:\sanddissertation\direct3d win32 game1\direct3d win32 game1\debug\vc141.pdb
 d:\sanddissertation\direct3d win32 game1\direct3d win32 game1\debug\vc141.idb
 d:\sanddissertation\direct3d win32 game1\direct3d win32 game1\debug\pch.obj
+d:\sanddissertation\direct3d win32 game1\direct3d win32 game1\debug\game.obj
 d:\sanddissertation\direct3d win32 game1\direct3d win32 game1\debug\gameobject.obj
 d:\sanddissertation\direct3d win32 game1\direct3d win32 game1\debug\main.obj
+d:\sanddissertation\direct3d win32 game1\direct3d win32 game1\debug\camera.obj
+d:\sanddissertation\direct3d win32 game1\direct3d win32 game1\debug\collisionmanager.obj
+d:\sanddissertation\direct3d win32 game1\debug\direct3d win32 game1.lib
+d:\sanddissertation\direct3d win32 game1\debug\direct3d win32 game1.exp
+d:\sanddissertation\direct3d win32 game1\debug\direct3d win32 game1.ilk
+d:\sanddissertation\direct3d win32 game1\debug\direct3d win32 game1.exe
+d:\sanddissertation\direct3d win32 game1\debug\direct3d win32 game1.pdb
+d:\sanddissertation\direct3d win32 game1\direct3d win32 game1\debug\resource.res
+d:\sanddissertation\direct3d win32 game1\direct3d win32 game1\debug\direct3d win32 game1.exe.embed.manifest.res
+d:\sanddissertation\direct3d win32 game1\direct3d win32 game1\debug\collisionmanager.obj.enc
+d:\sanddissertation\direct3d win32 game1\direct3d win32 game1\debug\direct3d win32 game1.exe.embed.manifest
+d:\sanddissertation\direct3d win32 game1\direct3d win32 game1\debug\direct3d win32 game1_manifest.rc
 d:\sanddissertation\direct3d win32 game1\direct3d win32 game1\debug\direct3d.d09ac8a5.tlog\cl.command.1.tlog
 d:\sanddissertation\direct3d win32 game1\direct3d win32 game1\debug\direct3d.d09ac8a5.tlog\cl.read.1.tlog
 d:\sanddissertation\direct3d win32 game1\direct3d win32 game1\debug\direct3d.d09ac8a5.tlog\cl.write.1.tlog
+d:\sanddissertation\direct3d win32 game1\direct3d win32 game1\debug\direct3d.d09ac8a5.tlog\direct3d win32 game1.write.1u.tlog
+d:\sanddissertation\direct3d win32 game1\direct3d win32 game1\debug\direct3d.d09ac8a5.tlog\link.command.1.tlog
+d:\sanddissertation\direct3d win32 game1\direct3d win32 game1\debug\direct3d.d09ac8a5.tlog\link.read.1.tlog
+d:\sanddissertation\direct3d win32 game1\direct3d win32 game1\debug\direct3d.d09ac8a5.tlog\link.write.1.tlog
+d:\sanddissertation\direct3d win32 game1\direct3d win32 game1\debug\direct3d.d09ac8a5.tlog\rc.command.1.tlog
+d:\sanddissertation\direct3d win32 game1\direct3d win32 game1\debug\direct3d.d09ac8a5.tlog\rc.read.1.tlog
+d:\sanddissertation\direct3d win32 game1\direct3d win32 game1\debug\direct3d.d09ac8a5.tlog\rc.write.1.tlog
